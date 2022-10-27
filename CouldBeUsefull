@@ -1,0 +1,25 @@
+
+
+
+# use_Small_Field = True
+#
+# rows_n_columns = 3 if use_Small_Field else 4  # check what field gonna be small or big
+#
+# board = []
+#
+# small_Test_Board1 = [[3, 4, 5],
+#                      [6, 7, 8],
+#                      [1, 2, 0]]
+#
+# small_Test_Board2 = [[1, 2, 4],
+#                      [8, 0, 6],
+#                      [5, 7, 3]]
+#
+# small_Result_Board = [[1, 2, 3],  # 0 - empty figure for swap items
+#                       [4, 5, 6],
+#                       [7, 8, 0]]
+#
+# big_Result_Board = [[1, 2, 3, 4],
+#                     [5, 6, 7, 8],
+#                     [9, 10, 11, 12],
+#                     [13, 14, 15, 0]]
