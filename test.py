@@ -1,3 +1,18 @@
+a = [[3, 2], [0, 9, 4]]
+
+
+def found_zero_in_board(item, board):
+    index = []
+    for i in board:
+        for j in i:
+            if j == item:
+                index.append(board.index(i))
+                index.append(i.index(j))
+    return index
+
+
+print(found_zero_in_board(0, a))
+
 # user_says = input("Please enter the string > ")
 # print(user_says)
 
