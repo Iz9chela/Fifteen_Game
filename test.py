@@ -1,17 +1,39 @@
-a = [[3, 2], [0, 9, 4]]
+# a = [[3, 2], [0, 9, 4]]
+#
+#
+# def found_zero_in_board(item, board):
+#     index = []
+#     for i in board:
+#         for j in i:
+#             if j == item:
+#                 index.append(board.index(i))
+#                 index.append(i.index(j))
+#     return index
+#
+#
+# print(found_zero_in_board(0, a))
 
-
-def found_zero_in_board(item, board):
-    index = []
-    for i in board:
-        for j in i:
-            if j == item:
-                index.append(board.index(i))
-                index.append(i.index(j))
-    return index
-
-
-print(found_zero_in_board(0, a))
+# board1 = [[1, 2, 3],
+#           [4, 5, 6],
+#           [7, 8, 0]]
+#
+# board2 = [[1, 2, 3, 4],
+#           [5, 6, 7, 8],
+#           [9, 10, 11, 12],
+#           [13, 14, 15, 0]]
+#
+# board_min_solve = [[1, 2, 3],
+#                    [4, 5, 6],
+#                    [7, 8, 0]]
+#
+# board_max_solve = [[1, 2, 3, 4],
+#                    [5, 6, 7, 8],
+#                    [9, 10, 11, 12],
+#                    [13, 14, 15, 0]]
+# #
+# print(board1 == board_min_solve)
+#
+# print(board2 == board_max_solve)
 
 # user_says = input("Please enter the string > ")
 # print(user_says)
