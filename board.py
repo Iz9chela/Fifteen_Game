@@ -56,7 +56,7 @@ class Board:
         return board_string
 
     def process_new_field(self):
-        hashedBoard = tuple(map(tuple,self.board))
+        hashedBoard = tuple(map(tuple, self.board))
         # print(hashedBoard)
         new_field_hash = hash(hashedBoard)  # get unique hash about our board
         if new_field_hash not in self.visited_field_hashes:
@@ -89,6 +89,25 @@ class Board:
             for column in range(self.size):
                 self.board[row].append(numbers[row * self.size + column])
 
+    def get_all_possible_moves(self):
+        moves = {}
+
+        zero = found_zero_in_board(self.board)
+
+        if zero[0] < self.size - 1:
+            moves.update({"DOWN": self.swap_down()})  # move down
+
+        if zero[0] > 0:
+            moves.update({"UP": self.swap_up()})  # move up
+
+        if zero[1] > 0:
+            moves.update({"LEFT": self.swap_left()})  # move left
+
+        if zero[1] < self.size - 1:
+            moves.update({"RIGHT": self.swap_right()})  # move right
+
+        return moves
+
     def swap(self, x, y):  # check if we could swap numbers
 
         zero = found_zero_in_board(self.board)
@@ -115,6 +134,3 @@ class Board:
 
     def swap_right(self):
         return self.swap(0, 1)
-
-
-

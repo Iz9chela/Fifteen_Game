@@ -94,3 +94,7 @@
 # product1 = {'title': 'Sony',
 #             'price': 100,
 #             }
+
+abc = {"UP":1, "DOWN":2}
+for a in abc:
+    print(a)
