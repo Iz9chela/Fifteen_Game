@@ -95,6 +95,12 @@
 #             'price': 100,
 #             }
 
-abc = {"UP":1, "DOWN":2}
-for a in abc:
-    print(a)
+saved_fields = []
+
+abc = {333: 1, 444: 2, 555: 3, 666: 4, 777: 0}
+sorted_possible_fields = dict(sorted(abc.items(), key=lambda item: item[1]))
+print(sorted_possible_fields)
+for field in sorted_possible_fields:
+    saved_fields.append(field)
+
+print(saved_fields)

@@ -14,9 +14,10 @@ def found_zero_in_board(board):
 class Board:
     def __init__(self, size_of_board: int):
         self.size = size_of_board
-        self.board = [[3, 8, 5],
-                      [0, 4, 2],
-                      [1, 6, 7]]
+        self.board = [[8, 6, 7],
+                      [2, 5, 4],
+                      [3, 0, 1]]
+        # self.board = []
         self.solved = False
 
     def __repr__(self):
