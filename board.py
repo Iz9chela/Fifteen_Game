@@ -1,11 +1,16 @@
 import random
+import math
+
+result_small_board = [[1, 2, 3],
+                      [4, 5, 6],
+                      [7, 8, 0]]
 
 
-def found_zero_in_board(board):
+def find_number_in_board(board, number=0):
     index = []
     for i in board:
         for j in i:
-            if j == 0:
+            if j == number:
                 index.append(board.index(i))
                 index.append(i.index(j))
     return index
@@ -52,7 +57,7 @@ class Board:
     def get_all_possible_moves(self):
         moves = []
 
-        zero = found_zero_in_board(self.board)
+        zero = find_number_in_board(self.board)
 
         if zero[0] < self.size - 1:
             moves.append(self.swap_down)
@@ -68,9 +73,24 @@ class Board:
 
         return moves
 
+    def calculate_manhattan_distance(self):
+        sum_manhattan_distance = 0
+        for i in range(self.size):
+            for j in range(self.size):
+                value = self.board[i][j]
+                if value == 0:
+                    continue
+                i_value = i
+                j_value = j
+
+                i_goal_value, j_goal_value = find_number_in_board(result_small_board, value)
+
+                sum_manhattan_distance += (math.fabs(i_goal_value - i_value) + math.fabs(j_goal_value - j_value))
+        return sum_manhattan_distance
+
     def swap(self, x, y):
 
-        zero = found_zero_in_board(self.board)
+        zero = find_number_in_board(self.board)
 
         if (zero[0] + x < 0 or zero[0] + x > self.size - 1
                 or zero[1] + y < 0 or zero[1] + y > self.size - 1):
