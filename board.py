@@ -16,8 +16,15 @@ big_Result_Board = [[1, 2, 3, 4],
                     [13, 14, 15, 0]]
 
 
+# solvable_boards_3x3 = list([[5,4,7], [1,3,6], [8,2,0]],
+#                            [[6,4,2], [5,3,7], [0,8,1]],
+#                            [[8,6,7],[2,5,4],[3,0,1]],
+#                            [[4,5,0],[8,1,3],[2, 6,7]])
+
 # solvable_boards_4x4 = list([[12, 3, 15, 11], [14, 9, 1, 7], [10, 13, 4, 5], [0, 6, 2, 8]],
-#                            [[2, 14, 15, 3], [12, 10, 8, 7], [6, 13, 4, 0], [5, 11, 1, 9]])
+#                            [[2, 14, 15, 3], [12, 10, 8, 7], [6, 13, 4, 0], [5, 11, 1, 9]],
+#                            [[11, 9, 4, 5],[14, 0, 13, 12],[7, 1, 8, 2],[3, 6, 15, 10]],
+#                            [[9, 8, 12, 1],[5, 7, 13, 0],[2, 10, 14, 3],[11, 15, 4, 6]])
 
 
 def find_number_in_board(board, number=0):
@@ -33,19 +40,18 @@ def find_number_in_board(board, number=0):
 class Board:
     def __init__(self, size_of_board: int, screen, buttons):
         self.size = size_of_board
-        # self.board = [[8, 6, 7],
-        #               [2, 5, 4],
-        #               [3, 0, 1]]
-        self.board = [[12, 3, 15, 11],
-                      [14, 9, 1, 7],
-                      [10, 13, 4, 5],
-                      [0, 6, 2, 8]]
+        self.board = []
+        self.board = [[8, 6, 7],
+                      [2, 5, 4],
+                      [3, 0, 1]]
+        # self.board = [[2, 14, 15, 3], [12, 10, 8, 7], [6, 13, 4, 0], [5, 11, 1, 9]]
         self.copied_board = copy.deepcopy(self.board)
         self.buttons = buttons
         self.solved = False
-        self.font = pygame.font.Font(None, 120)
+        self.font = pygame.font.Font(None, 100)
         self.screen = screen
         self.solve_running = False
+        self.time = 0
 
         for button in self.buttons:
             button.assing_board(self)
@@ -79,6 +85,8 @@ class Board:
             for column in range(self.size):
                 self.board[row].append(numbers[row * self.size + column])
 
+        self.copied_board = self.board
+
     def render_board(self):
         for i, row in enumerate(self.board):
             for j, value in enumerate(row):
@@ -90,6 +98,13 @@ class Board:
 
         for button in self.buttons:
             button.render(self.screen)
+
+        # self.font = pygame.font.Font(None, 80)
+        time_x, time_y = 210, 510
+        pygame.draw.rect(self.screen, (27, 27, 179), (time_x, time_y, 400, 400))
+        text = self.font.render(str(f"Time: {self.time}"), True, (0, 0, 0))
+        self.screen.blit(text, (time_x, time_y))
+
         pygame.display.flip()
         pygame.time.delay(0)
 
@@ -169,3 +184,7 @@ class Board:
 
     def reset_board(self):
         self.board = self.copied_board
+        self.time = 0
+
+    def result_time(self, value):
+        self.time = value

@@ -3,7 +3,7 @@ from solver import dfs_solve, greedy_solve, a_star_solve
 import pygame
 
 
-SIZE = 4
+SIZE = 3
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
@@ -47,6 +47,7 @@ def reset_board(board):
     board.reset_board()
 
 
+
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 dfs_button = Button((253, 0, 6), 510, 10, 80, 80, dfs_solve, pygame.font.SysFont("Verdana", 32), "DFS")
@@ -55,6 +56,8 @@ a_star_button = Button((180, 242, 0), 510, 210, 80, 80, a_star_solve, pygame.fon
 reset_button = Button((0, 153, 153), 610, 110, 180, 80, reset_board, pygame.font.SysFont("Verdana", 32), "    Reset")
 buttons = [dfs_button, greedy_button, a_star_button, reset_button]
 board = Board(SIZE, screen, buttons)
+
+# board.random_field_generation()
 
 screen.fill((40, 40, 40))
 pygame.display.set_caption("Puzzle")

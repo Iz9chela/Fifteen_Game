@@ -57,8 +57,7 @@ def solver(board: Board, board_solver: str):
             board.render_board()
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_fields)} explored fields")
-                end_time = time.time() - start_time
-                print("Solved in %.2f seconds" % end_time)
+                board.result_time(round(time.time() - start_time, 2))
                 return True
             moves = board.get_all_possible_moves()
             for move in moves:
@@ -77,8 +76,7 @@ def solver(board: Board, board_solver: str):
             board.render_board()
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_fields)} explored fields")
-                end_time = time.time() - start_time
-                print("Solved in %.2f seconds" % end_time)
+                board.result_time(round(time.time() - start_time, 2))
                 return True
 
             moves = board.get_all_possible_moves()
@@ -101,8 +99,7 @@ def solver(board: Board, board_solver: str):
             board.render_board()
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_saved_fields)} explored fields")
-                end_time = time.time() - start_time
-                print("Solved in %.2f seconds" % end_time)
+                board.result_time(round(time.time() - start_time, 2))
                 return True
             moves = board.get_all_possible_moves()
             possible_manhattan_moves = {}
