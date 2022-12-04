@@ -10,25 +10,19 @@ big_Result_Board = ((1, 2, 3, 4),
                     (13, 14, 15, 0))
 
 
-def get_field_with_value(field, g_score=0):
+def get_field_with_value(board: Board):
     right_tiles_in_board = 0
-    for i in range(len(field)):
-        row = field[i]
-        for j in range(len(row)):
-            if field[i][j] == small_Result_Board[i][j]:
-                right_tiles_in_board += 1
-    return {field: right_tiles_in_board + g_score}
-
-
-def get_f_score(field, g_score):
-    wrong_tiles_counter = 0  # h - number of misplaced tiles in board
-    for i in range(len(field)):
-        row = field[i]
-        for j in range(len(row)):
-            if field[i][j] != small_Result_Board[i][j]:
-                wrong_tiles_counter += 1
-    wrong_tiles_counter += g_score
-    return wrong_tiles_counter
+    # for i in range(len(field)):
+    #     row = field[i]
+    #     for j in range(len(row)):
+    #         if len(field) == 3:
+    #             if field[i][j] == small_Result_Board[i][j]:
+    #                 right_tiles_in_board += 1
+    #         else:
+    #             if field[i][j] == big_Result_Board[i][j]:
+    #                 right_tiles_in_board += 1
+    # return {field: right_tiles_in_board}
+    return board.export_board(), board.calculate_manhattan_distance()
 
 
 def is_correct(current_board):
@@ -38,13 +32,20 @@ def is_correct(current_board):
 
 
 def solver(board: Board, board_solver: str):
-    saved_fields: list[tuple[tuple[int]]] = [board.export_board()]
-    explored_fields = set()
-    g_score = 0  # g - num of nodes traversed from start node to get curr node
     min_score = 100
-    sorted_saved_fields: list[tuple[tuple[tuple[int]], int]] = [
-        (board.export_board(), board.calculate_manhattan_distance())]
-    explored_saved_fields: set[tuple[tuple[tuple[int]], int]] = set()
+    start_time = time.time()
+    if board.size == 3:
+        saved_fields: list[tuple[tuple[int]]] = [board.export_board()]
+        explored_fields = set()
+        sorted_saved_fields: list[tuple[tuple[tuple[int]], int]] = [
+            (board.export_board(), board.calculate_manhattan_distance())]
+        explored_saved_fields: set[tuple[tuple[tuple[int]], int]] = set()
+    else:
+        saved_fields: list[tuple[tuple[tuple[int]]]] = [board.export_board()]
+        explored_fields = set()
+        sorted_saved_fields: list[tuple[tuple[tuple[tuple[int]]], int]] = [
+            (board.export_board(), board.calculate_manhattan_distance())]
+        explored_saved_fields: set[tuple[tuple[tuple[tuple[int]]], int]] = set()
 
     if board_solver == "DFS":
         while saved_fields:
@@ -52,14 +53,17 @@ def solver(board: Board, board_solver: str):
             if current_field in explored_fields:
                 continue
             explored_fields.add(current_field)
+            board.import_board(current_field)
+            board.render_board()
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_fields)} explored fields")
+                end_time = time.time() - start_time
+                print("Solved in %.2f seconds" % end_time)
                 return True
-
-            board.import_board(current_field)
             moves = board.get_all_possible_moves()
             for move in moves:
                 move()
+                board.render_board()
                 new_field = board.export_board()
                 saved_fields.append(new_field)
                 board.import_board(current_field)
@@ -69,44 +73,48 @@ def solver(board: Board, board_solver: str):
             if current_field in explored_fields:
                 continue
             explored_fields.add(current_field)
+            board.import_board(current_field)
+            board.render_board()
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_fields)} explored fields")
+                end_time = time.time() - start_time
+                print("Solved in %.2f seconds" % end_time)
                 return True
 
-            board.import_board(current_field)
-            print(current_field)
             moves = board.get_all_possible_moves()
             possible_fields = {}
             for move in moves:
                 move()
-                new_field = board.export_board()
-                new_possible_field = get_field_with_value(new_field)
-                possible_fields.update(new_possible_field)
-                saved_fields.append(new_field)
+                board.render_board()
+                new_possible_field, new_field_value = get_field_with_value(board)
+                possible_fields.update({new_possible_field: new_field_value})
+                saved_fields.append(new_possible_field)
                 board.import_board(current_field)
-            sorted_possible_fields = dict(sorted(possible_fields.items(), key=lambda item: item[1]))
+            sorted_possible_fields = dict(sorted(possible_fields.items(), key=lambda item: item[1], reverse=True))
             for field in sorted_possible_fields:
                 saved_fields.append(field)
     elif board_solver == "A_STAR":
         while saved_fields:
             current_field = sorted_saved_fields[0][0]
             current_field_score = sorted_saved_fields[0][1]
+            board.import_board(current_field)
+            board.render_board()
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_saved_fields)} explored fields")
+                end_time = time.time() - start_time
+                print("Solved in %.2f seconds" % end_time)
                 return True
-            board.import_board(current_field)
-            # print("curr >> ", current_field, current_field_score)
             moves = board.get_all_possible_moves()
             possible_manhattan_moves = {}
             for move in moves:
                 move()
+                board.render_board()
                 new_field = board.export_board()
                 new_field_score = board.calculate_manhattan_distance()
                 possible_manhattan_moves.update({new_field: new_field_score})
                 board.import_board(current_field)
             sorted_possible_manhattan_moves = \
                 dict(sorted(possible_manhattan_moves.items(), key=lambda item: item[1], reverse=False))
-
             min_field = min(sorted_possible_manhattan_moves.items(), key=lambda value: value[1])
             if min_field[1] < min_score and min_field not in explored_saved_fields:
                 min_score = min_field[1]
@@ -117,9 +125,6 @@ def solver(board: Board, board_solver: str):
             explored_saved_fields.add((current_field, current_field_score))
             del sorted_saved_fields[0]
             sorted_saved_fields.sort(key=lambda a: a[1])
-            # print("sorted_saved_fields >> ", sorted_saved_fields)
-            # print("explored_saved_fields >> ", explored_saved_fields)
-            # time.sleep(1)
 
 
 def dfs_solve(board: Board):

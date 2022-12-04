@@ -1,9 +1,23 @@
+import copy
 import random
 import math
+
+import pygame
+
+pygame.font.init()
 
 result_small_board = [[1, 2, 3],
                       [4, 5, 6],
                       [7, 8, 0]]
+
+big_Result_Board = [[1, 2, 3, 4],
+                    [5, 6, 7, 8],
+                    [9, 10, 11, 12],
+                    [13, 14, 15, 0]]
+
+
+# solvable_boards_4x4 = list([[12, 3, 15, 11], [14, 9, 1, 7], [10, 13, 4, 5], [0, 6, 2, 8]],
+#                            [[2, 14, 15, 3], [12, 10, 8, 7], [6, 13, 4, 0], [5, 11, 1, 9]])
 
 
 def find_number_in_board(board, number=0):
@@ -17,13 +31,24 @@ def find_number_in_board(board, number=0):
 
 
 class Board:
-    def __init__(self, size_of_board: int):
+    def __init__(self, size_of_board: int, screen, buttons):
         self.size = size_of_board
-        self.board = [[8, 6, 7],
-                      [2, 5, 4],
-                      [3, 0, 1]]
-        # self.board = []
+        # self.board = [[8, 6, 7],
+        #               [2, 5, 4],
+        #               [3, 0, 1]]
+        self.board = [[12, 3, 15, 11],
+                      [14, 9, 1, 7],
+                      [10, 13, 4, 5],
+                      [0, 6, 2, 8]]
+        self.copied_board = copy.deepcopy(self.board)
+        self.buttons = buttons
         self.solved = False
+        self.font = pygame.font.Font(None, 120)
+        self.screen = screen
+        self.solve_running = False
+
+        for button in self.buttons:
+            button.assing_board(self)
 
     def __repr__(self):
         for i in range(self.size):
@@ -54,6 +79,20 @@ class Board:
             for column in range(self.size):
                 self.board[row].append(numbers[row * self.size + column])
 
+    def render_board(self):
+        for i, row in enumerate(self.board):
+            for j, value in enumerate(row):
+                x = j * (100 + 5) + 5
+                y = i * (100 + 5) + 5
+                pygame.draw.rect(self.screen, (0, 255, 0), (x, y, 100, 100))
+                text = self.font.render(str(self.board[i][j]), True, (0, 0, 0))
+                self.screen.blit(text, (x, y))
+
+        for button in self.buttons:
+            button.render(self.screen)
+        pygame.display.flip()
+        pygame.time.delay(0)
+
     def get_all_possible_moves(self):
         moves = []
 
@@ -83,7 +122,10 @@ class Board:
                 i_value = i
                 j_value = j
 
-                i_goal_value, j_goal_value = find_number_in_board(result_small_board, value)
+                if self.size == 3:
+                    i_goal_value, j_goal_value = find_number_in_board(result_small_board, value)
+                else:
+                    i_goal_value, j_goal_value = find_number_in_board(big_Result_Board, value)
 
                 sum_manhattan_distance += (math.fabs(i_goal_value - i_value) + math.fabs(j_goal_value - j_value))
         return sum_manhattan_distance
@@ -124,3 +166,6 @@ class Board:
         for row in self.board:
             rows_as_tuples.append(tuple(row))
         return tuple(rows_as_tuples)
+
+    def reset_board(self):
+        self.board = self.copied_board
