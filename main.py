@@ -2,7 +2,6 @@ from board import Board
 from solver import dfs_solve, greedy_solve, a_star_solve
 import pygame
 
-
 SIZE = 3
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -47,6 +46,9 @@ def reset_board(board):
     board.reset_board()
 
 
+def random_field(board):
+    board.random_field_generation()
+
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -54,14 +56,16 @@ dfs_button = Button((253, 0, 6), 510, 10, 80, 80, dfs_solve, pygame.font.SysFont
 greedy_button = Button((255, 219, 0), 510, 110, 80, 80, greedy_solve, pygame.font.SysFont("Verdana", 22), "Greedy")
 a_star_button = Button((180, 242, 0), 510, 210, 80, 80, a_star_solve, pygame.font.SysFont("Verdana", 40), " A*")
 reset_button = Button((0, 153, 153), 610, 110, 180, 80, reset_board, pygame.font.SysFont("Verdana", 32), "    Reset")
-buttons = [dfs_button, greedy_button, a_star_button, reset_button]
+random_field = Button((0, 153, 153), 610, 210, 180, 80, random_field, pygame.font.SysFont("Verdana", 32), "   Random")
+buttons = [dfs_button, greedy_button, a_star_button, reset_button, random_field]
 board = Board(SIZE, screen, buttons)
 
-# board.random_field_generation()
+board.is_solvable()
 
 screen.fill((40, 40, 40))
 pygame.display.set_caption("Puzzle")
 if __name__ == '__main__':
+
     running = True
     while running:
         for event in pygame.event.get():
@@ -76,9 +80,7 @@ if __name__ == '__main__':
                     dfs_solve(board)
                 if event.key == pygame.K_q:
                     running = False
-
         board.render_board()
         pygame.display.flip()
 
     pygame.quit()
-

@@ -16,13 +16,16 @@ big_Result_Board = [[1, 2, 3, 4],
                     [13, 14, 15, 0]]
 
 
+# unsolvable_board_3x3 = list([[5, 8, 1], [3, 7, 0], [2, 6, 4]])
+# unsolvable_board_4x4 = list([[13, 1, 5,14], [8, 9, 12,3], [15, 7, 4,2], [6,10,0,11]])
+
 # solvable_boards_3x3 = list([[5,4,7], [1,3,6], [8,2,0]],
 #                            [[6,4,2], [5,3,7], [0,8,1]],
 #                            [[8,6,7],[2,5,4],[3,0,1]],
 #                            [[4,5,0],[8,1,3],[2, 6,7]])
 
 # solvable_boards_4x4 = list([[12, 3, 15, 11], [14, 9, 1, 7], [10, 13, 4, 5], [0, 6, 2, 8]],
-#                            [[2, 14, 15, 3], [12, 10, 8, 7], [6, 13, 4, 0], [5, 11, 1, 9]],
+#                            [[14, 13, 5, 15], [10, 9, 6, 2], [4, 12, 3, 11], [8, 7, 1, 0]],
 #                            [[11, 9, 4, 5],[14, 0, 13, 12],[7, 1, 8, 2],[3, 6, 15, 10]],
 #                            [[9, 8, 12, 1],[5, 7, 13, 0],[2, 10, 14, 3],[11, 15, 4, 6]])
 
@@ -41,10 +44,8 @@ class Board:
     def __init__(self, size_of_board: int, screen, buttons):
         self.size = size_of_board
         self.board = []
-        self.board = [[8, 6, 7],
-                      [2, 5, 4],
-                      [3, 0, 1]]
-        # self.board = [[2, 14, 15, 3], [12, 10, 8, 7], [6, 13, 4, 0], [5, 11, 1, 9]]
+        self.board = [[4, 5, 0], [8, 1, 3], [2, 6, 7]]
+        # self.board = [[13, 1, 5, 14], [8, 9, 12, 3], [15, 7, 4, 2], [6, 10, 0, 11]]
         self.copied_board = copy.deepcopy(self.board)
         self.buttons = buttons
         self.solved = False
@@ -52,6 +53,7 @@ class Board:
         self.screen = screen
         self.solve_running = False
         self.time = 0
+        self.is_board_solvable = False
 
         for button in self.buttons:
             button.assing_board(self)
@@ -86,6 +88,7 @@ class Board:
                 self.board[row].append(numbers[row * self.size + column])
 
         self.copied_board = self.board
+        self.is_solvable()
 
     def render_board(self):
         for i, row in enumerate(self.board):
@@ -188,3 +191,17 @@ class Board:
 
     def result_time(self, value):
         self.time = value
+
+    def get_inv_count(self, arr):
+        inv_count = 0
+        empty_value = 0
+        for i in range(0, self.size * self.size):
+            for j in range(i + 1, self.size * self.size):
+                if arr[j] != empty_value and arr[i] != empty_value and arr[i] > arr[j]:
+                    inv_count += 1
+        return inv_count
+
+    def is_solvable(self):
+        inv_count = self.get_inv_count([j for sub in self.board for j in sub])
+        self.is_board_solvable = inv_count % 2 == 0
+        return self.is_board_solvable
