@@ -44,8 +44,8 @@ class Board:
     def __init__(self, size_of_board: int, screen, buttons):
         self.size = size_of_board
         self.board = []
-        self.board = [[4, 5, 0], [8, 1, 3], [2, 6, 7]]
-        # self.board = [[13, 1, 5, 14], [8, 9, 12, 3], [15, 7, 4, 2], [6, 10, 0, 11]]
+        # self.board = [[4, 5, 0], [8, 1, 3], [2, 6, 7]]
+        # self.board = [[12, 3, 15, 11], [14, 9, 1, 7], [10, 13, 4, 5], [0, 6, 2, 8]]
         self.copied_board = copy.deepcopy(self.board)
         self.buttons = buttons
         self.solved = False
@@ -57,6 +57,8 @@ class Board:
 
         for button in self.buttons:
             button.assing_board(self)
+
+        self.random_field_generation()
 
     def __repr__(self):
         for i in range(self.size):
@@ -102,9 +104,14 @@ class Board:
         for button in self.buttons:
             button.render(self.screen)
 
-        # self.font = pygame.font.Font(None, 80)
-        time_x, time_y = 210, 510
-        pygame.draw.rect(self.screen, (27, 27, 179), (time_x, time_y, 400, 400))
+        txt = 'Yes' if self.is_board_solvable else 'No'
+        solvable_x, solvable_y = 5, 430
+        pygame.draw.rect(self.screen, (27, 27, 179), (solvable_x, solvable_y, 430, 100))
+        text = self.font.render(str(f"Solvable:{txt}"), True, (0, 0, 0))
+        self.screen.blit(text, (solvable_x, solvable_y))
+
+        time_x, time_y = 5, 510
+        pygame.draw.rect(self.screen, (27, 27, 179), (time_x, time_y, 430, 100))
         text = self.font.render(str(f"Time: {self.time}"), True, (0, 0, 0))
         self.screen.blit(text, (time_x, time_y))
 

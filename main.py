@@ -60,8 +60,6 @@ random_field = Button((0, 153, 153), 610, 210, 180, 80, random_field, pygame.fon
 buttons = [dfs_button, greedy_button, a_star_button, reset_button, random_field]
 board = Board(SIZE, screen, buttons)
 
-board.is_solvable()
-
 screen.fill((40, 40, 40))
 pygame.display.set_caption("Puzzle")
 if __name__ == '__main__':
@@ -80,6 +78,7 @@ if __name__ == '__main__':
                     dfs_solve(board)
                 if event.key == pygame.K_q:
                     running = False
+
         board.render_board()
         pygame.display.flip()
 
