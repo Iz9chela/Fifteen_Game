@@ -2,7 +2,7 @@ from board import Board
 from solver import dfs_solve, greedy_solve, a_star_solve
 import pygame
 
-SIZE = 3
+SIZE = 4
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 

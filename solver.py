@@ -54,15 +54,16 @@ def solver(board: Board, board_solver: str):
                 continue
             explored_fields.add(current_field)
             board.import_board(current_field)
-            board.render_board()
+            # board.render_board()
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_fields)} explored fields")
                 board.result_time(round(time.time() - start_time, 2))
+                print(round(time.time() - start_time, 2))
                 return True
             moves = board.get_all_possible_moves()
             for move in moves:
                 move()
-                board.render_board()
+                # board.render_board()
                 new_field = board.export_board()
                 saved_fields.append(new_field)
                 board.import_board(current_field)
@@ -77,6 +78,7 @@ def solver(board: Board, board_solver: str):
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_fields)} explored fields")
                 board.result_time(round(time.time() - start_time, 2))
+                # print(round(time.time() - start_time, 2))
                 return True
 
             moves = board.get_all_possible_moves()
@@ -100,6 +102,7 @@ def solver(board: Board, board_solver: str):
             if is_correct(current_field):
                 print(f"Solution has been found with {len(explored_saved_fields)} explored fields")
                 board.result_time(round(time.time() - start_time, 2))
+                # print(round(time.time() - start_time, 2))
                 return True
             moves = board.get_all_possible_moves()
             possible_manhattan_moves = {}

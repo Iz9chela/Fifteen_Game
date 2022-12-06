@@ -22,12 +22,20 @@ big_Result_Board = [[1, 2, 3, 4],
 # solvable_boards_3x3 = list([[5,4,7], [1,3,6], [8,2,0]],
 #                            [[6,4,2], [5,3,7], [0,8,1]],
 #                            [[8,6,7],[2,5,4],[3,0,1]],
-#                            [[4,5,0],[8,1,3],[2, 6,7]])
+#                            [[4,5,0],[8,1,3],[2,6,7]],
+#                            [[7,6,4],[8,3,1],[2,0,5]],
+#                            [[0,6,2],[8,1,4],[3,5,7]],
+#                            [[6,7,8],[5,3,4],[2,5,1]],
+#                            [[8,1,4],[2,0,7],[6,3,5]])
 
 # solvable_boards_4x4 = list([[12, 3, 15, 11], [14, 9, 1, 7], [10, 13, 4, 5], [0, 6, 2, 8]],
 #                            [[14, 13, 5, 15], [10, 9, 6, 2], [4, 12, 3, 11], [8, 7, 1, 0]],
 #                            [[11, 9, 4, 5],[14, 0, 13, 12],[7, 1, 8, 2],[3, 6, 15, 10]],
-#                            [[9, 8, 12, 1],[5, 7, 13, 0],[2, 10, 14, 3],[11, 15, 4, 6]])
+#                            [[9, 8, 12, 1],[5, 7, 13, 0],[2, 10, 14, 3],[11, 15, 4, 6]],
+#                            [[13, 6, 12, 2],[5, 0, 10, 1],[9, 11, 8, 15],[14, 7, 4, 3]],
+#                            [[3, 10, 14, 11],[6, 13, 0, 1],[15, 12, 8, 2],[7, 5, 9, 4]],
+#                            [[4, 6, 8, 5],[9, 12, 15, 0],[14, 10, 2, 7],[1, 11, 3, 13]],
+#                            [[11, 1, 10, 15],[7, 0, 5, 9],[8, 2, 14, 3],[13, 6, 12, 4]])
 
 
 def find_number_in_board(board, number=0):
@@ -45,7 +53,7 @@ class Board:
         self.size = size_of_board
         self.board = []
         # self.board = [[4, 5, 0], [8, 1, 3], [2, 6, 7]]
-        # self.board = [[12, 3, 15, 11], [14, 9, 1, 7], [10, 13, 4, 5], [0, 6, 2, 8]]
+        self.board = [[12, 3, 15, 11], [14, 9, 1, 7], [10, 13, 4, 5], [0, 6, 2, 8]]
         self.copied_board = copy.deepcopy(self.board)
         self.buttons = buttons
         self.solved = False
@@ -57,8 +65,14 @@ class Board:
 
         for button in self.buttons:
             button.assing_board(self)
+        if len(self.board) <= 0:
+            self.random_field_generation()
+            self.is_solvable()
+        else:
+            self.is_solvable()
 
-        self.random_field_generation()
+
+
 
     def __repr__(self):
         for i in range(self.size):
@@ -117,6 +131,7 @@ class Board:
 
         pygame.display.flip()
         pygame.time.delay(0)
+        pygame.event.pump()
 
     def get_all_possible_moves(self):
         moves = []
